@@ -9,14 +9,13 @@ namespace WinterUniverse
         public Action OnEffectsChanged;
 
         private PawnController _pawn;
-        private List<Effect> _allEffects;
 
-        public List<Effect> AllEffects => _allEffects;
+        public List<Effect> AllEffects { get; private set; }
 
         public EffectHolder(PawnController pawn)
         {
             _pawn = pawn;
-            _allEffects = new();
+            AllEffects = new();
         }
 
         public void ApplyEffects(List<EffectCreator> effects)
@@ -37,22 +36,22 @@ namespace WinterUniverse
 
         public void AddEffect(Effect effect)
         {
-            _allEffects.Add(effect);
+            AllEffects.Add(effect);
         }
 
         public void RemoveEffect(Effect effect)
         {
-            if (_allEffects.Contains(effect))
+            if (AllEffects.Contains(effect))
             {
-                _allEffects.Remove(effect);
+                AllEffects.Remove(effect);
             }
         }
 
         public void HandleEffects(float deltaTime)
         {
-            for (int i = _allEffects.Count - 1; i >= 0; i--)
+            for (int i = AllEffects.Count - 1; i >= 0; i--)
             {
-                _allEffects[i].OnTick(deltaTime);
+                AllEffects[i].OnTick(deltaTime);
             }
             OnEffectsChanged?.Invoke();
         }

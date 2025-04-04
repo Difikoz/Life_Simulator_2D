@@ -9,5 +9,10 @@ namespace WinterUniverse
         [SerializeField] private List<DamageType> _damageTypes = new();
 
         public List<DamageType> DamageTypes => _damageTypes;
+
+        public override void OnHit(PawnController caster, Collider2D collider, Vector3 position, Vector3 direction, AbilityTargetType targetType)
+        {
+            
+        }
     }
 }

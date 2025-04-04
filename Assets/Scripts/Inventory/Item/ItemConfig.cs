@@ -19,12 +19,12 @@ namespace WinterUniverse
             switch (_itemType)
             {
                 case ItemType.Weapon:
-                    WeaponItemConfig melee = (WeaponItemConfig)this;
-                    pawn.Equipment.EquipWeapon(melee, fromInventory);
+                    WeaponItemConfig weapon = (WeaponItemConfig)this;
+                    pawn.Equipment.EquipWeapon(weapon, fromInventory);
                     break;
                 case ItemType.Armor:
-                    ArmorItemConfig chest = (ArmorItemConfig)this;
-                    pawn.Equipment.EquipArmor(chest, fromInventory);
+                    ArmorItemConfig armor = (ArmorItemConfig)this;
+                    pawn.Equipment.EquipArmor(armor, fromInventory);
                     break;
                 case ItemType.Consumable:
                     ConsumableItemConfig consumable = (ConsumableItemConfig)this;
@@ -32,6 +32,8 @@ namespace WinterUniverse
                     {
                         pawn.Status.EffectHolder.ApplyEffects(consumable.Effects);
                     }
+                    break;
+                case ItemType.Resource:
                     break;
             }
         }

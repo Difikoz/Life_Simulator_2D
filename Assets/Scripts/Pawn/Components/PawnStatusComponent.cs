@@ -15,41 +15,37 @@ namespace WinterUniverse
         [SerializeField] private float _regenerationDelayTime = 10f;
         [SerializeField] private float _effectsTickTime = 1f;
 
-        private EffectHolder _effectHolder;
-        private StatHolder _statHolder;
-        private StateHolder _stateHolder;
-        private FactionConfig _faction;
         private float _healthCurrent;
         private float _regenerationCurrentTickTime;
         private float _regenerationCurrentDelayTime;
         private float _effectsCurrentTickTime;
 
-        public EffectHolder EffectHolder => _effectHolder;
-        public StatHolder StatHolder => _statHolder;
-        public StateHolder StateHolder => _stateHolder;
-        public FactionConfig Faction => _faction;
+        public EffectHolder EffectHolder { get; private set; }
+        public StatHolder StatHolder { get; private set; }
+        public StateHolder StateHolder { get; private set; }
+        public FactionConfig Faction { get; private set; }
 
         public override void Initialize()
         {
             base.Initialize();
-            _effectHolder = new(_pawn);
-            _statHolder = new();
-            _stateHolder = new();
-            _statHolder.CreateStats(GameManager.StaticInstance.ConfigsManager.Stats);
-            _stateHolder.CreateStates(GameManager.StaticInstance.ConfigsManager.States);
+            EffectHolder = new(_pawn);
+            StatHolder = new();
+            StateHolder = new();
+            StatHolder.CreateStats(GameManager.StaticInstance.ConfigsManager.Stats);
+            StateHolder.CreateStates(GameManager.StaticInstance.ConfigsManager.States);
         }
 
         public override void Enable()
         {
             base.Enable();
-            _statHolder.OnStatsChanged += ForceUpdateVitalities;
+            StatHolder.OnStatsChanged += ForceUpdateVitalities;
             ForceUpdateVitalities();
             Revive();
         }
 
         public override void Disable()
         {
-            _statHolder.OnStatsChanged -= ForceUpdateVitalities;
+            StatHolder.OnStatsChanged -= ForceUpdateVitalities;
             base.Disable();
         }
 
@@ -60,7 +56,7 @@ namespace WinterUniverse
             {
                 if (_regenerationCurrentTickTime >= _regenerationTickTime)
                 {
-                    RestoreHealthCurrent(_statHolder.HealthRegeneration * _regenerationTickTime);
+                    RestoreHealthCurrent(StatHolder.HealthRegeneration * _regenerationTickTime);
                     _regenerationCurrentTickTime = 0f;
                 }
                 else
@@ -75,7 +71,7 @@ namespace WinterUniverse
             if (_effectsCurrentTickTime >= _effectsTickTime)
             {
                 _effectsCurrentTickTime = 0f;
-                _effectHolder.HandleEffects(_effectsTickTime);
+                EffectHolder.HandleEffects(_effectsTickTime);
             }
             else
             {
@@ -85,11 +81,11 @@ namespace WinterUniverse
 
         public void ApplyDamage(List<DamageType> damageTypes, PawnController source)
         {
-            if (_stateHolder.CompareStateValue("Is Dead", true))
+            if (StateHolder.CompareStateValue("Is Dead", true))
             {
                 return;
             }
-            if (source != null && UnityEngine.Random.value < _statHolder.Evade / 100f)
+            if (source != null && UnityEngine.Random.value < StatHolder.Evade / 100f)
             {
                 return;
             }
@@ -101,23 +97,23 @@ namespace WinterUniverse
 
         public void ReduceHealthCurrent(float value, DamageTypeConfig type, PawnController source)
         {
-            if (_stateHolder.CompareStateValue("Is Dead", true))
+            if (StateHolder.CompareStateValue("Is Dead", true))
             {
                 return;
             }
             if (_pawn.Equipment.ArmorSlot.Config != null)
             {
-                _effectHolder.ApplyEffects(_pawn.Equipment.ArmorSlot.Config.OnDamageEffects);
+                EffectHolder.ApplyEffects(_pawn.Equipment.ArmorSlot.Config.OnDamageEffects);
             }
-            float resistance = _statHolder.GetStat(type.ResistanceStat.ID).CurrentValue;
+            float resistance = StatHolder.GetStat(type.ResistanceStat.ID).CurrentValue;
             if (resistance < 100f)
             {
                 _regenerationCurrentDelayTime = 0f;
                 value -= value * resistance / 100f;
-                _healthCurrent = Mathf.Clamp(_healthCurrent - value, 0f, _statHolder.HealthMax);
+                _healthCurrent = Mathf.Clamp(_healthCurrent - value, 0f, StatHolder.HealthMax);
                 if (_healthCurrent > 0f)
                 {
-                    OnHealthChanged?.Invoke(_healthCurrent, _statHolder.HealthMax);
+                    OnHealthChanged?.Invoke(_healthCurrent, StatHolder.HealthMax);
                 }
                 else
                 {
@@ -132,43 +128,43 @@ namespace WinterUniverse
 
         public void RestoreHealthCurrent(float value)
         {
-            if (_stateHolder.CompareStateValue("Is Dead", true))
+            if (StateHolder.CompareStateValue("Is Dead", true))
             {
                 return;
             }
-            _healthCurrent = Mathf.Clamp(_healthCurrent + value, 0f, _statHolder.HealthMax);
-            OnHealthChanged?.Invoke(_healthCurrent, _statHolder.HealthMax);
+            _healthCurrent = Mathf.Clamp(_healthCurrent + value, 0f, StatHolder.HealthMax);
+            OnHealthChanged?.Invoke(_healthCurrent, StatHolder.HealthMax);
         }
 
         public void Die(PawnController source)
         {
-            if (_stateHolder.CompareStateValue("Is Dead", true))
+            if (StateHolder.CompareStateValue("Is Dead", true))
             {
                 return;
             }
             _pawn.Animator.PlayAction("Death");
             _healthCurrent = 0f;
-            OnHealthChanged?.Invoke(_healthCurrent, _statHolder.HealthMax);
-            _stateHolder.SetStateValue("Is Dead", true);
+            OnHealthChanged?.Invoke(_healthCurrent, StatHolder.HealthMax);
+            StateHolder.SetStateValue("Is Dead", true);
             OnDied?.Invoke();
         }
 
         public void Revive()
         {
-            _stateHolder.SetStateValue("Is Dead", false);
-            RestoreHealthCurrent(_statHolder.HealthMax);
+            StateHolder.SetStateValue("Is Dead", false);
+            RestoreHealthCurrent(StatHolder.HealthMax);
             OnRevived?.Invoke();
         }
 
         public void ForceUpdateVitalities()
         {
-            _healthCurrent = Mathf.Clamp(_healthCurrent, 0f, _statHolder.HealthMax);
-            OnHealthChanged?.Invoke(_healthCurrent, _statHolder.HealthMax);
+            _healthCurrent = Mathf.Clamp(_healthCurrent, 0f, StatHolder.HealthMax);
+            OnHealthChanged?.Invoke(_healthCurrent, StatHolder.HealthMax);
         }
 
         public void ChangeFaction(FactionConfig config)
         {
-            _faction = config;
+            Faction = config;
             OnFactionChanged?.Invoke();
         }
     }

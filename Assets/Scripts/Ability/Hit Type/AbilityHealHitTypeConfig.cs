@@ -8,5 +8,10 @@ namespace WinterUniverse
         [SerializeField] private float _value;
 
         public float Value => _value;
+
+        public override void OnHit(PawnController caster, Collider2D collider, Vector3 position, Vector3 direction, AbilityTargetType targetType)
+        {
+
+        }
     }
 }

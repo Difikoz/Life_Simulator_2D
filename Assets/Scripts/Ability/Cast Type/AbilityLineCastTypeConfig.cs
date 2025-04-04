@@ -11,5 +11,10 @@ namespace WinterUniverse
         public float Width => _width;
         public float Length => _length;
 
+        public override void OnCast(PawnController caster, PawnController target, Vector3 position, Vector3 direction, AbilityHitTypeConfig hitType, AbilityTargetType targetType)
+        {
+
+        }
+
     }
 }

@@ -6,9 +6,7 @@ namespace WinterUniverse
     {
         [SerializeField] private SpriteRenderer _spriteRenderer;
 
-        private ArmorItemConfig _config;
-
-        public ArmorItemConfig Config => _config;
+        public ArmorItemConfig Config { get; private set; }
 
         public override void Initialize()
         {
@@ -18,10 +16,10 @@ namespace WinterUniverse
 
         public void ChangeConfig(ArmorItemConfig config)
         {
-            _config = config;
-            if (_config != null)
+            Config = config;
+            if (Config != null)
             {
-                _spriteRenderer.sprite = _config.VisualSprite;
+                _spriteRenderer.sprite = Config.VisualSprite;
             }
             else
             {

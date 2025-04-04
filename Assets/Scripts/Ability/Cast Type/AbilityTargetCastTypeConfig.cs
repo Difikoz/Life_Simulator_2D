@@ -8,5 +8,10 @@ namespace WinterUniverse
         [SerializeField] private float _distance = 2f;
 
         public float Distance => _distance;
+
+        public override void OnCast(PawnController caster, PawnController target, Vector3 position, Vector3 direction, AbilityHitTypeConfig hitType, AbilityTargetType targetType)
+        {
+
+        }
     }
 }

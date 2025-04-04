@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace WinterUniverse
 {
-    [CreateAssetMenu(fileName = "Consumable", menuName = "Winter Universe/Item/Consumable/New Consumable")]
+    [CreateAssetMenu(fileName = "Consumable", menuName = "Winter Universe/Item/New Consumable")]
     public class ConsumableItemConfig : ItemConfig
     {
         [SerializeField] private List<EffectCreator> _effects = new();

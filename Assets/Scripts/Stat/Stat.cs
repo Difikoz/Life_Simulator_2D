@@ -6,73 +6,66 @@ namespace WinterUniverse
     [System.Serializable]
     public class Stat
     {
-        private StatConfig _config;
-        private float _currentValue;
-        private float _flatValue;
-        private float _multiplierValue;
-        private List<float> _flatModifiers;
-        private List<float> _multiplierModifiers;
-
-        public StatConfig Config => _config;
-        public float CurrentValue => _currentValue;
-        public float FlatValue => _flatValue;
-        public float MultiplierValue => _multiplierValue;
-        public List<float> FlatModifiers => _flatModifiers;
-        public List<float> MultiplierModifiers => _multiplierModifiers;
+        public StatConfig Config { get; private set; }
+        public float CurrentValue { get; private set; }
+        public float FlatValue { get; private set; }
+        public float MultiplierValue { get; private set; }
+        public List<float> FlatModifiers { get; private set; }
+        public List<float> MultiplierModifiers { get; private set; }
 
         public Stat(StatConfig config)
         {
-            _config = config;
-            _currentValue = _config.BaseValue;
-            _flatModifiers = new();
-            _multiplierModifiers = new();
+            Config = config;
+            CurrentValue = Config.BaseValue;
+            FlatModifiers = new();
+            MultiplierModifiers = new();
         }
 
         public void AddModifier(StatModifier modifier)
         {
             if (modifier.Type == StatModifierType.Flat)
             {
-                _flatModifiers.Add(modifier.Value);
+                FlatModifiers.Add(modifier.Value);
             }
             else if (modifier.Type == StatModifierType.Multiplier)
             {
-                _multiplierModifiers.Add(modifier.Value);
+                MultiplierModifiers.Add(modifier.Value);
             }
             CalculateCurrentValue();
         }
 
         public void RemoveModifier(StatModifier modifier)
         {
-            if (modifier.Type == StatModifierType.Flat && _flatModifiers.Contains(modifier.Value))
+            if (modifier.Type == StatModifierType.Flat && FlatModifiers.Contains(modifier.Value))
             {
-                _flatModifiers.Remove(modifier.Value);
+                FlatModifiers.Remove(modifier.Value);
             }
-            else if (modifier.Type == StatModifierType.Multiplier && _multiplierModifiers.Contains(modifier.Value))
+            else if (modifier.Type == StatModifierType.Multiplier && MultiplierModifiers.Contains(modifier.Value))
             {
-                _multiplierModifiers.Remove(modifier.Value);
+                MultiplierModifiers.Remove(modifier.Value);
             }
             CalculateCurrentValue();
         }
 
         public void CalculateCurrentValue()
         {
-            float value = _config.BaseValue;
-            _flatValue = 0f;
-            _multiplierValue = 0f;
-            foreach (float f in _flatModifiers)
+            float value = Config.BaseValue;
+            FlatValue = 0f;
+            MultiplierValue = 0f;
+            foreach (float f in FlatModifiers)
             {
-                _flatValue += f;
+                FlatValue += f;
             }
-            foreach (float f in _multiplierModifiers)
+            foreach (float f in MultiplierModifiers)
             {
-                _multiplierValue += f;
+                MultiplierValue += f;
             }
-            if (_multiplierValue != 0f)
+            if (MultiplierValue != 0f)
             {
-                value += _multiplierValue * value / 100f;
+                value += MultiplierValue * value / 100f;
             }
-            value = Mathf.Clamp(value, _config.MinValue, _config.MaxValue);
-            _currentValue = value;
+            value = Mathf.Clamp(value, Config.MinValue, Config.MaxValue);
+            CurrentValue = value;
         }
     }
 }

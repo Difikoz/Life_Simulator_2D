@@ -8,12 +8,12 @@ namespace WinterUniverse
 
         public override void OnApply()
         {
-            _owner.Status.RestoreHealthCurrent(_value);
+            Owner.Status.RestoreHealthCurrent(Value);
         }
 
         protected override void ApplyOnTick(float deltaTime)
         {
-            _owner.Status.RestoreHealthCurrent(_value * deltaTime);
+            Owner.Status.RestoreHealthCurrent(Value * deltaTime);
         }
     }
 }

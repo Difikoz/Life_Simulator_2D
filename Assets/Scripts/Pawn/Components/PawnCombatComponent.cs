@@ -7,15 +7,13 @@ namespace WinterUniverse
     {
         public Action OnTargetChanged;
 
-        private PawnController _target;
-
-        public PawnController Target => _target;
+        public PawnController Target { get; private set; }
 
         public void SetTarget(PawnController target)
         {
             if (target != null)
             {
-                _target = target;
+                Target = target;
                 OnTargetChanged?.Invoke();
             }
             else
@@ -26,7 +24,7 @@ namespace WinterUniverse
 
         public void ResetTarget()
         {
-            _target = null;
+            Target = null;
             OnTargetChanged?.Invoke();
         }
     }

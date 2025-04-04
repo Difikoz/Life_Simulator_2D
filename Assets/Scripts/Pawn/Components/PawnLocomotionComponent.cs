@@ -1,69 +1,82 @@
+using System;
 using UnityEngine;
 
 namespace WinterUniverse
 {
     public class PawnLocomotionComponent : PawnComponent
     {
-        private Rigidbody2D _rb;
-        [SerializeField] private Vector3 _destination;
-        [SerializeField] private Vector2 _moveDirection;
-        [SerializeField] private Vector2 _moveVelocity;
-        [SerializeField] private bool _reachedDestination;
-        [SerializeField] private bool _isFacingRight;
+        public Action OnStartMoving;
+        public Action OnStopMoving;
 
-        public bool ReachedDestination => _reachedDestination;
-        public bool IsFacingRight => _isFacingRight;
+        public Vector2 MoveDirection { get; private set; }
+        public Vector2 MoveVelocity { get; private set; }
+        public bool ReachedDestination { get; private set; }
+        public bool IsMoving { get; private set; }
+        public bool IsFacingRight { get; private set; }
 
         public override void Initialize()
         {
             base.Initialize();
-            _rb = GetComponent<Rigidbody2D>();
-            _isFacingRight = true;
+            IsFacingRight = true;
         }
 
         public override void OnFixedUpdate()
         {
             base.OnFixedUpdate();
-            CalculateMoveVelocity();
-            Flip();
-            _rb.linearVelocity = _moveVelocity;
+            HandleMovement();
+            HandleRotation();
         }
 
-        private void CalculateMoveVelocity()
+        private void HandleMovement()
         {
-            if (_moveDirection != Vector2.zero && _pawn.Status.StateHolder.CompareStateValue("Is Perfoming Action", false))
+            if (IsMoving)
             {
-                _moveVelocity = Vector2.MoveTowards(_moveVelocity, _moveDirection * _pawn.Status.StatHolder.MoveSpeed, 8f * Time.fixedDeltaTime);
+                if (MoveDirection == Vector2.zero || _pawn.Status.StateHolder.CompareStateValue("Is Perfoming Action", true))
+                {
+                    IsMoving = false;
+                    _pawn.Animator.SetBool("Is Moving", IsMoving);
+                    OnStopMoving?.Invoke();
+                }
+                else
+                {
+                    MoveVelocity = Vector2.MoveTowards(MoveVelocity, MoveDirection, Time.fixedDeltaTime);
+                }
             }
             else
             {
-                _moveVelocity = Vector2.MoveTowards(_moveVelocity, Vector2.zero, 16f * Time.fixedDeltaTime);
+                if (MoveDirection != Vector2.zero && _pawn.Status.StateHolder.CompareStateValue("Is Perfoming Action", false))
+                {
+                    IsMoving = true;
+                    _pawn.Animator.SetBool("Is Moving", IsMoving);
+                    OnStartMoving?.Invoke();
+                }
+                else
+                {
+                    MoveVelocity = Vector2.MoveTowards(MoveVelocity, Vector2.zero, Time.fixedDeltaTime);
+                }
             }
-            _pawn.Animator.SetFloat("Velocity", _moveVelocity.magnitude);
+            _pawn.RB.linearVelocity = MoveVelocity * _pawn.Status.StatHolder.MoveSpeed;
+            _pawn.Animator.SetFloat("Velocity", _pawn.RB.linearVelocity.magnitude);
         }
 
-        private void Flip()
+        private void HandleRotation()
         {
-            if (_isFacingRight && _moveVelocity.x < 0f)
+            if (IsFacingRight)
             {
-                FlipLeft();
+                if (MoveVelocity.x < 0f)
+                {
+                    IsFacingRight = false;
+                    transform.localScale = new(-1f, 1f, 1f);
+                }
             }
-            else if (!_isFacingRight && _moveVelocity.x > 0f)
+            else
             {
-                FlipRight();
+                if (MoveVelocity.x > 0f)
+                {
+                    IsFacingRight = true;
+                    transform.localScale = new(1f, 1f, 1f);
+                }
             }
-        }
-
-        private void FlipRight()
-        {
-            _isFacingRight = true;
-            transform.localScale = new(1f, 1f, 1f);
-        }
-
-        private void FlipLeft()
-        {
-            _isFacingRight = false;
-            transform.localScale = new(-1f, 1f, 1f);
         }
     }
 }

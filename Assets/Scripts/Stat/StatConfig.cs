@@ -5,9 +5,9 @@ namespace WinterUniverse
     [CreateAssetMenu(fileName = "Stat", menuName = "Winter Universe/Pawn/New Stat")]
     public class StatConfig : BasicInfoConfig
     {
-        [SerializeField] private float _baseValue;
-        [SerializeField] private float _minValue = -999999f;
-        [SerializeField] private float _maxValue = 999999f;
+        [SerializeField, Range(-999999f, 999999f)] private float _baseValue = 0f;
+        [SerializeField, Range(-999999f, 999999f)] private float _minValue = -999999f;
+        [SerializeField, Range(-999999f, 999999f)] private float _maxValue = 999999f;
         [SerializeField] private bool _isPercent;
 
         public float BaseValue => _baseValue;

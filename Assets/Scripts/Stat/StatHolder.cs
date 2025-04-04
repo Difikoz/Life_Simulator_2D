@@ -7,34 +7,28 @@ namespace WinterUniverse
     {
         public Action OnStatsChanged;
 
-        private Dictionary<string, Stat> _stats;
-        private float _healthMax;
-        private float _healthRegeneration;
-        private float _moveSpeed;
-        private float _evade;
-
-        public Dictionary<string, Stat> Stats => _stats;
-        public float HealthMax => _healthMax;
-        public float HealthRegeneration => _healthRegeneration;
-        public float MoveSpeed => _moveSpeed;
-        public float Evade => _evade;
+        public Dictionary<string, Stat> Stats { get; private set; }
+        public float HealthMax { get; private set; }
+        public float HealthRegeneration { get; private set; }
+        public float MoveSpeed { get; private set; }
+        public float Evade { get; private set; }
 
         public StatHolder()
         {
-            _stats = new();
+            Stats = new();
         }
 
         public void CreateStats(List<StatConfig> stats)
         {
             foreach (StatConfig stat in stats)
             {
-                _stats.Add(stat.ID, new(stat));
+                Stats.Add(stat.ID, new(stat));
             }
         }
 
         public void RecalculateStats()
         {
-            foreach (KeyValuePair<string, Stat> s in _stats)
+            foreach (KeyValuePair<string, Stat> s in Stats)
             {
                 s.Value.CalculateCurrentValue();
             }
@@ -43,9 +37,9 @@ namespace WinterUniverse
 
         public Stat GetStat(string id)
         {
-            if (_stats.ContainsKey(id))
+            if (Stats.ContainsKey(id))
             {
-                return _stats[id];
+                return Stats[id];
             }
             return null;
         }
@@ -80,10 +74,10 @@ namespace WinterUniverse
 
         public void UpdateValues()
         {
-            _healthMax = GetStat("HP MAX").CurrentValue;
-            _healthRegeneration = GetStat("HP REGEN").CurrentValue;
-            _moveSpeed = GetStat("MSPD").CurrentValue;
-            _evade = GetStat("EVADE").CurrentValue;
+            HealthMax = GetStat("Health Max").CurrentValue;
+            HealthRegeneration = GetStat("Health Regeneration").CurrentValue;
+            MoveSpeed = GetStat("Move Speed").CurrentValue;
+            Evade = GetStat("Evade").CurrentValue;
             OnStatsChanged?.Invoke();
         }
     }

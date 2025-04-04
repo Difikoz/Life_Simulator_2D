@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace WinterUniverse
@@ -7,73 +8,75 @@ namespace WinterUniverse
     [RequireComponent(typeof(PawnEquipmentComponent))]
     [RequireComponent(typeof(PawnInventoryComponent))]
     [RequireComponent(typeof(PawnLocomotionComponent))]
+    [RequireComponent(typeof(PawnSoundComponent))]
     [RequireComponent(typeof(PawnStatusComponent))]
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(Rigidbody2D))]
+    [RequireComponent(typeof(CircleCollider2D))]
     public class PawnController : BasicComponent
     {
-        private PawnAnimatorComponent _animator;
-        private PawnCombatComponent _combat;
-        private PawnEquipmentComponent _equipment;
-        private PawnInventoryComponent _inventory;
-        private PawnLocomotionComponent _locomotion;
-        private PawnStatusComponent _status;
-
-        public PawnAnimatorComponent Animator => _animator;
-        public PawnCombatComponent Combat => _combat;
-        public PawnEquipmentComponent Equipment => _equipment;
-        public PawnInventoryComponent Inventory => _inventory;
-        public PawnLocomotionComponent Locomotion => _locomotion;
-        public PawnStatusComponent Status => _status;
+        private List<PawnComponent> _components;
+        public Rigidbody2D RB { get; private set; }
+        public CircleCollider2D Collider { get; private set; }
+        public PawnAnimatorComponent Animator { get; private set; }
+        public PawnCombatComponent Combat { get; private set; }
+        public PawnEquipmentComponent Equipment { get; private set; }
+        public PawnInventoryComponent Inventory { get; private set; }
+        public PawnLocomotionComponent Locomotion { get; private set; }
+        public PawnSoundComponent Sound { get; private set; }
+        public PawnStatusComponent Status { get; private set; }
 
         public override void Initialize()
         {
             base.Initialize();
-            _animator = GetComponent<PawnAnimatorComponent>();
-            _combat = GetComponent<PawnCombatComponent>();
-            _equipment = GetComponent<PawnEquipmentComponent>();
-            _inventory = GetComponent<PawnInventoryComponent>();
-            _locomotion = GetComponent<PawnLocomotionComponent>();
-            _status = GetComponent<PawnStatusComponent>();
-            _animator.Initialize();
-            _combat.Initialize();
-            _equipment.Initialize();
-            _inventory.Initialize();
-            _locomotion.Initialize();
-            _status.Initialize();
+            _components = new();
+            RB = GetComponent<Rigidbody2D>();
+            Collider = GetComponent<CircleCollider2D>();
+            Animator = GetComponent<PawnAnimatorComponent>();
+            Combat = GetComponent<PawnCombatComponent>();
+            Equipment = GetComponent<PawnEquipmentComponent>();
+            Inventory = GetComponent<PawnInventoryComponent>();
+            Locomotion = GetComponent<PawnLocomotionComponent>();
+            Sound = GetComponent<PawnSoundComponent>();
+            Status = GetComponent<PawnStatusComponent>();
+            _components.Add(Animator);
+            _components.Add(Combat);
+            _components.Add(Equipment);
+            _components.Add(Inventory);
+            _components.Add(Locomotion);
+            _components.Add(Sound);
+            _components.Add(Status);
+            foreach(PawnComponent component in _components)
+            {
+                component.Initialize();
+            }
         }
 
         public override void Enable()
         {
             base.Enable();
-            _animator.Enable();
-            _combat.Enable();
-            _equipment.Enable();
-            _inventory.Enable();
-            _locomotion.Enable();
-            _status.Enable();
+            foreach (PawnComponent component in _components)
+            {
+                component.Enable();
+            }
         }
 
         public override void Disable()
         {
-            _animator.Disable();
-            _combat.Disable();
-            _equipment.Disable();
-            _inventory.Disable();
-            _locomotion.Disable();
-            _status.Disable();
+            foreach (PawnComponent component in _components)
+            {
+                component.Disable();
+            }
             base.Disable();
         }
 
         public override void OnFixedUpdate()
         {
             base.OnFixedUpdate();
-            _animator.OnFixedUpdate();
-            _combat.OnFixedUpdate();
-            _equipment.OnFixedUpdate();
-            _inventory.OnFixedUpdate();
-            _locomotion.OnFixedUpdate();
-            _status.OnFixedUpdate();
+            foreach (PawnComponent component in _components)
+            {
+                component.OnFixedUpdate();
+            }
         }
     }
 }

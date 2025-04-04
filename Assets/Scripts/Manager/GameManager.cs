@@ -1,89 +1,82 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace WinterUniverse
 {
     public class GameManager : Singleton<GameManager>
     {
-        private InputMode _inputMode;
-        private AudioManager _audioManager;
-        private CameraManager _cameraManager;
-        private ConfigsManager _configsManager;
-        private TimeManager _timeManager;
-        private UIManager _uiManager;
-
-        public InputMode InputMode => _inputMode;
-        public AudioManager AudioManager => _audioManager;
-        public CameraManager CameraManager => _cameraManager;
-        public ConfigsManager ConfigsManager => _configsManager;
-        public TimeManager TimeManager => _timeManager;
-        public UIManager UIManager => _uiManager;
+        private List<BasicComponent> _components;
+        public InputMode InputMode { get; private set; }
+        public AudioManager AudioManager { get; private set; }
+        public CameraManager CameraManager { get; private set; }
+        public ConfigsManager ConfigsManager { get; private set; }
+        public TimeManager TimeManager { get; private set; }
+        public UIManager UIManager { get; private set; }
 
         protected override void Awake()
         {
             base.Awake();
-            GetComponents();
-            InitializeComponents();
+            _components = new();
+            AudioManager = GetComponentInChildren<AudioManager>();
+            CameraManager = GetComponentInChildren<CameraManager>();
+            ConfigsManager = GetComponentInChildren<ConfigsManager>();
+            TimeManager = GetComponentInChildren<TimeManager>();
+            //UIManager = GetComponentInChildren<UIManager>();
+            _components.Add(AudioManager);
+            _components.Add(CameraManager);
+            _components.Add(ConfigsManager);
+            _components.Add(TimeManager);
+            //_components.Add(UIManager);
+            foreach (BasicComponent component in _components)
+            {
+                component.Initialize();
+            }
+            SetInputMode(InputMode.Game);
         }
 
         private void OnEnable()
         {
-            EnableComponents();
+            foreach (BasicComponent component in _components)
+            {
+                component.Enable();
+            }
         }
 
         private void OnDisable()
         {
-            DisableComponents();
+            foreach (BasicComponent component in _components)
+            {
+                component.Disable();
+            }
         }
 
-        private void GetComponents()
+        private void Update()
         {
-            _audioManager = GetComponentInChildren<AudioManager>();
-            _cameraManager = GetComponentInChildren<CameraManager>();
-            _configsManager = GetComponentInChildren<ConfigsManager>();
-            _timeManager = GetComponentInChildren<TimeManager>();
-            _uiManager = GetComponentInChildren<UIManager>();
-        }
-
-        private void InitializeComponents()
-        {
-            _audioManager.Initialize();
-            _cameraManager.Initialize();
-            _configsManager.Initialize();
-            _timeManager.Initialize();
-            _uiManager.Initialize();
-            SetInputMode(InputMode.Game);
-        }
-
-        private void EnableComponents()
-        {
-            _audioManager.Enable();
-            _cameraManager.Enable();
-            _configsManager.Enable();
-            _timeManager.Enable();
-            _uiManager.Enable();
-        }
-
-        private void DisableComponents()
-        {
-            _audioManager.Disable();
-            _cameraManager.Disable();
-            _configsManager.Disable();
-            _timeManager.Disable();
-            _uiManager.Disable();
+            foreach (BasicComponent component in _components)
+            {
+                component.OnUpdate();
+            }
         }
 
         private void FixedUpdate()
         {
-            _audioManager.OnFixedUpdate();
-            _cameraManager.OnFixedUpdate();
-            _configsManager.OnFixedUpdate();
-            _timeManager.OnFixedUpdate();
-            _uiManager.OnFixedUpdate();
+            foreach (BasicComponent component in _components)
+            {
+                component.OnFixedUpdate();
+            }
+        }
+
+        private void LateUpdate()
+        {
+            foreach (BasicComponent component in _components)
+            {
+                component.OnLateUpdate();
+            }
         }
 
         public void SetInputMode(InputMode mode)
         {
-            _inputMode = mode;
+            InputMode = mode;
         }
     }
 }

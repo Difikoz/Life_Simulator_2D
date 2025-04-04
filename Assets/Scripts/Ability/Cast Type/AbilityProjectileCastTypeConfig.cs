@@ -32,5 +32,10 @@ namespace WinterUniverse
                 //_projectile(_shootPoint.transform.position, Quaternion.Euler(0f, 0f, _spread)).Initialize(_pawn, _config);
             }
         }
+
+        public override void OnCast(PawnController caster, PawnController target, Vector3 position, Vector3 direction, AbilityHitTypeConfig hitType, AbilityTargetType targetType)
+        {
+
+        }
     }
 }

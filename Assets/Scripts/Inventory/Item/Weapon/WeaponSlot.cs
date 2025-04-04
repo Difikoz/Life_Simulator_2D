@@ -1,3 +1,4 @@
+using Lean.Pool;
 using UnityEngine;
 
 namespace WinterUniverse
@@ -6,24 +7,27 @@ namespace WinterUniverse
     {
         [SerializeField] private Transform _weaponRoot;
 
-        private PawnController _pawn;
-        private WeaponItemConfig _config;
-        private WeaponController _weapon;
-
-        public WeaponItemConfig Config => _config;
-        public WeaponController Weapon => _weapon;
+        public WeaponItemConfig Config { get; private set; }
+        public WeaponController Weapon { get; private set; }
 
         public override void Initialize()
         {
             base.Initialize();
-            _pawn = GetComponentInParent<PawnController>();
+            ChangeConfig(null);
         }
 
         public void ChangeConfig(WeaponItemConfig config)
         {
-            _config = config;
-            // spawn?
-            // change sprite?
+            if(Weapon != null)
+            {
+                LeanPool.Despawn(Weapon.gameObject);
+                Weapon = null;
+            }
+            Config = config;
+            if(Config != null)
+            {
+                Weapon = LeanPool.Spawn(Config.WeaponPrefab, _weaponRoot).GetComponent<WeaponController>();
+            }
         }
     }
 }

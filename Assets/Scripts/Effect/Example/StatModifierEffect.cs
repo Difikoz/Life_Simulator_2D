@@ -14,13 +14,13 @@ namespace WinterUniverse
 
         public override void OnApply()
         {
-            _modifier = new(_stat, new(_modifierType, _value));
-            _owner.Status.StatHolder.AddStatModifier(_modifier);
+            _modifier = new(_stat, new(_modifierType, Value));
+            Owner.Status.StatHolder.AddStatModifier(_modifier);
         }
 
         public override void OnRemove()
         {
-            _owner.Status.StatHolder.RemoveStatModifier(_modifier);
+            Owner.Status.StatHolder.RemoveStatModifier(_modifier);
         }
     }
 }
