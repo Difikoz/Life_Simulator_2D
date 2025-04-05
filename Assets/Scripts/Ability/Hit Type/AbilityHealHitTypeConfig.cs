@@ -9,9 +9,32 @@ namespace WinterUniverse
 
         public float Value => _value;
 
-        public override void OnHit(PawnController caster, Collider2D collider, Vector3 position, Vector3 direction, AbilityTargetType targetType)
+        public override void OnHit(PawnController caster, Collider2D collider, Vector3 position, Vector3 direction, float angle, AbilityTargetType targetType)
         {
 
+        }
+
+        public override void OnHit(PawnController caster, PawnController target, Vector3 position, Vector3 direction, float angle, AbilityTargetType targetType)
+        {
+            switch (targetType)
+            {
+                case AbilityTargetType.Caster:
+                    if (caster != target)
+                    {
+                        return;
+                    }
+                    break;
+                case AbilityTargetType.Target:
+                    if (caster == target)
+                    {
+                        return;
+                    }
+                    break;
+                case AbilityTargetType.All:
+
+                    break;
+            }
+            target.Status.RestoreHealthCurrent(_value);
         }
     }
 }

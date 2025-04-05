@@ -7,10 +7,12 @@ namespace WinterUniverse
     public class WeaponItemConfig : ItemConfig
     {
         [SerializeField] private GameObject _weaponPrefab;
+        [SerializeField] private float _cooldown = 1f;
         [SerializeField] private List<StatModifierCreator> _modifiers = new();
         [SerializeField] private List<AbilityConfig> _abilities = new();
 
         public GameObject WeaponPrefab => _weaponPrefab;
+        public float Cooldown => _cooldown;
         public List<StatModifierCreator> Modifiers => _modifiers;
         public List<AbilityConfig> Abilities => _abilities;
 

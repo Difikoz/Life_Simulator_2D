@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Line
   m_EditorClassIdentifier: 
   _width: 1
-  _length: 2
+  _length: 4

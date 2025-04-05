@@ -8,7 +8,7 @@ namespace WinterUniverse
         public Action OnStartMoving;
         public Action OnStopMoving;
 
-        public Vector2 MoveDirection { get; private set; }
+        public Vector2 MoveDirection;// { get; private set; }
         public Vector2 MoveVelocity { get; private set; }
         public bool ReachedDestination { get; private set; }
         public bool IsMoving { get; private set; }
@@ -67,6 +67,7 @@ namespace WinterUniverse
                 {
                     IsFacingRight = false;
                     transform.localScale = new(-1f, 1f, 1f);
+                    _pawn.Animator.ArmsPoint.localScale = new(1f, -1f, 1f);
                 }
             }
             else
@@ -75,6 +76,7 @@ namespace WinterUniverse
                 {
                     IsFacingRight = true;
                     transform.localScale = new(1f, 1f, 1f);
+                    _pawn.Animator.ArmsPoint.localScale = new(1f, 1f, 1f);
                 }
             }
         }

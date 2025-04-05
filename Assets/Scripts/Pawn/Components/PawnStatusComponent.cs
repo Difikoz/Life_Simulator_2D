@@ -39,7 +39,7 @@ namespace WinterUniverse
         {
             base.Enable();
             StatHolder.OnStatsChanged += ForceUpdateVitalities;
-            ForceUpdateVitalities();
+            StatHolder.RecalculateStats();
             Revive();
         }
 

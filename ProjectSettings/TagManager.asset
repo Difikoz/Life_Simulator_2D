@@ -11,6 +11,9 @@ TagManager:
   - Pawn
   - Water
   - UI
+  - Interactable
+  - Damageable
+  - Damage
   - 
   - 
   - 
@@ -33,13 +36,16 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - WorldSpaceUI
   m_SortingLayers:
+  - name: Background
+    uniqueID: 2583769389
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Foreground
+    uniqueID: 1516173447
     locked: 0
   m_RenderingLayers:
   - Default

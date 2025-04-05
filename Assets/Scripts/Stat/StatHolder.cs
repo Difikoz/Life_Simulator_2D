@@ -12,6 +12,8 @@ namespace WinterUniverse
         public float HealthRegeneration { get; private set; }
         public float MoveSpeed { get; private set; }
         public float Evade { get; private set; }
+        public float ViewDistance { get; private set; }
+        public float ViewAngle { get; private set; }
 
         public StatHolder()
         {
@@ -78,6 +80,8 @@ namespace WinterUniverse
             HealthRegeneration = GetStat("Health Regeneration").CurrentValue;
             MoveSpeed = GetStat("Move Speed").CurrentValue;
             Evade = GetStat("Evade").CurrentValue;
+            ViewDistance = GetStat("View Distance").CurrentValue;
+            ViewAngle = GetStat("View Angle").CurrentValue;
             OnStatsChanged?.Invoke();
         }
     }

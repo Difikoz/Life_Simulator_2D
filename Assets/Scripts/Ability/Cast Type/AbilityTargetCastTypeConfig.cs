@@ -9,9 +9,13 @@ namespace WinterUniverse
 
         public float Distance => _distance;
 
-        public override void OnCast(PawnController caster, PawnController target, Vector3 position, Vector3 direction, AbilityHitTypeConfig hitType, AbilityTargetType targetType)
+        public override void OnCast(PawnController caster, PawnController target, Vector3 position, Vector3 direction, float angle, AbilityHitTypeConfig hitType, AbilityTargetType targetType)
         {
-
+            if (target == null || Vector2.Distance(target.transform.position, position) > _distance)
+            {
+                return;
+            }
+            hitType.OnHit(caster, target, position, direction, angle, targetType);
         }
     }
 }

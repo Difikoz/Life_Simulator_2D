@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1f15f8097de0234985780ba989d14f3, type: 3}
+  m_Name: Bow
+  m_EditorClassIdentifier: 
+  _id: Bow
+  _displayName:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  _description:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+    m_LocalVariables: []
+  _icon:
+    m_TableReference:
+      m_TableCollectionName: 
+    m_TableEntryReference:
+      m_KeyId: 0
+      m_Key: 
+    m_FallbackState: 0
+    m_WaitForCompletion: 0
+  _itemType: 0
+  _stackSize: 1
+  _weight: 1
+  _price: 100
+  _weaponPrefab: {fileID: 5633117876055949237, guid: 5a92440e708afef4585b437853171b33, type: 3}
+  _cooldown: 1
+  _modifiers:
+  - _stat: {fileID: 11400000, guid: b366043e4c427c84985d98ef0db91826, type: 2}
+    _modifier:
+      _type: 1
+      _value: -10
+  _abilities:
+  - {fileID: 11400000, guid: 186e0a875d0ad164a87b58321226842a, type: 2}
+  references:
+    version: 2
+    RefIds: []

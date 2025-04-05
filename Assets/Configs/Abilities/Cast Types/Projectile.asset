@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 066f5d9ec03f55341aa5bc28d020f7a1, type: 3}
   m_Name: Projectile
   m_EditorClassIdentifier: 
-  _projectile: {fileID: 0}
+  _projectile: {fileID: 3267574066213285704, guid: e296d13631fa4e5408526e74a7ba15bf, type: 3}
+  _projectileSprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
+  _projectileSize: 0.2
   _range: 10
   _force: 10
   _spread: 5
   _count: 1
   _pierce: 1
-  _isHoming: 0
+  _isHoming: 1
   _turnSpeed: 180

@@ -8,6 +8,7 @@ namespace WinterUniverse
     [RequireComponent(typeof(PawnEquipmentComponent))]
     [RequireComponent(typeof(PawnInventoryComponent))]
     [RequireComponent(typeof(PawnLocomotionComponent))]
+    [RequireComponent(typeof(PawnSensorComponent))]
     [RequireComponent(typeof(PawnSoundComponent))]
     [RequireComponent(typeof(PawnStatusComponent))]
     [RequireComponent(typeof(Animator))]
@@ -23,6 +24,7 @@ namespace WinterUniverse
         public PawnEquipmentComponent Equipment { get; private set; }
         public PawnInventoryComponent Inventory { get; private set; }
         public PawnLocomotionComponent Locomotion { get; private set; }
+        public PawnSensorComponent Sensor { get; private set; }
         public PawnSoundComponent Sound { get; private set; }
         public PawnStatusComponent Status { get; private set; }
 
@@ -37,6 +39,7 @@ namespace WinterUniverse
             Equipment = GetComponent<PawnEquipmentComponent>();
             Inventory = GetComponent<PawnInventoryComponent>();
             Locomotion = GetComponent<PawnLocomotionComponent>();
+            Sensor = GetComponent<PawnSensorComponent>();
             Sound = GetComponent<PawnSoundComponent>();
             Status = GetComponent<PawnStatusComponent>();
             _components.Add(Animator);
@@ -44,6 +47,7 @@ namespace WinterUniverse
             _components.Add(Equipment);
             _components.Add(Inventory);
             _components.Add(Locomotion);
+            _components.Add(Sensor);
             _components.Add(Sound);
             _components.Add(Status);
             foreach(PawnComponent component in _components)

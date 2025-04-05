@@ -43,7 +43,7 @@ MonoBehaviour:
   _stackSize: 1
   _weight: 10
   _price: 100
-  _visualSprite: {fileID: 0}
+  _visualSprite: {fileID: 9129081239844455988, guid: b817832245586de47a55d9bdf9f7ae0c, type: 3}
   _modifiers:
   - _stat: {fileID: 11400000, guid: 850d1320a5e36f6439bad9d47fbb90e9, type: 2}
     _modifier:

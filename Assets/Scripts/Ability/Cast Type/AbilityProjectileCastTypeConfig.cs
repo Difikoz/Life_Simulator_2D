@@ -1,3 +1,4 @@
+using Lean.Pool;
 using UnityEngine;
 
 namespace WinterUniverse
@@ -6,6 +7,8 @@ namespace WinterUniverse
     public class AbilityProjectileCastTypeConfig : AbilityCastTypeConfig
     {
         [SerializeField] private GameObject _projectile;
+        [SerializeField] private Sprite _projectileSprite;
+        [SerializeField] private float _projectileSize = 0.2f;
         [SerializeField] private float _range = 10f;
         [SerializeField] private float _force = 10f;
         [SerializeField] private float _spread = 5f;
@@ -15,6 +18,8 @@ namespace WinterUniverse
         [SerializeField] private float _turnSpeed = 180f;
 
         public GameObject Projectile => _projectile;
+        public Sprite ProjectileSprite => _projectileSprite;
+        public float ProjectileSize => _projectileSize;
         public float Range => _range;
         public float Force => _force;
         public float Spread => _spread;
@@ -23,19 +28,14 @@ namespace WinterUniverse
         public bool IsHoming => _isHoming;
         public float TurnSpeed => _turnSpeed;
 
-        public void SpawnProjectiles()
+        public override void OnCast(PawnController caster, PawnController target, Vector3 position, Vector3 direction, float angle, AbilityHitTypeConfig hitType, AbilityTargetType targetType)
         {
+            float spread;
             for (int i = 0; i < _count; i++)
             {
-                _spread = Random.Range(-_spread, _spread);
-                //_spread += _shootPoint.transform.eulerAngles.z;
-                //_projectile(_shootPoint.transform.position, Quaternion.Euler(0f, 0f, _spread)).Initialize(_pawn, _config);
+                spread = angle + Random.Range(-_spread, _spread);
+                LeanPool.Spawn(_projectile, position, Quaternion.Euler(0f, 0f, spread)).GetComponent<ProjectileController>().Initialize(caster, target, this, hitType, targetType);
             }
-        }
-
-        public override void OnCast(PawnController caster, PawnController target, Vector3 position, Vector3 direction, AbilityHitTypeConfig hitType, AbilityTargetType targetType)
-        {
-
         }
     }
 }

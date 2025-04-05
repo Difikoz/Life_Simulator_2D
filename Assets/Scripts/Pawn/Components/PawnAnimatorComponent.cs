@@ -6,11 +6,13 @@ namespace WinterUniverse
     {
         [SerializeField] private Transform _headPoint;
         [SerializeField] private Transform _bodyPoint;
+        [SerializeField] private Transform _armsPoint;
 
         private Animator _animator;
 
         public Transform HeadPoint => _headPoint;
         public Transform BodyPoint => _bodyPoint;
+        public Transform ArmsPoint => _armsPoint;
 
         public override void Initialize()
         {

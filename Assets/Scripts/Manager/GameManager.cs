@@ -10,8 +10,10 @@ namespace WinterUniverse
         public AudioManager AudioManager { get; private set; }
         public CameraManager CameraManager { get; private set; }
         public ConfigsManager ConfigsManager { get; private set; }
+        public LayersManager LayersManager { get; private set; }
         public TimeManager TimeManager { get; private set; }
         public UIManager UIManager { get; private set; }
+        public PawnController Pawn { get; private set; }
 
         protected override void Awake()
         {
@@ -20,13 +22,17 @@ namespace WinterUniverse
             AudioManager = GetComponentInChildren<AudioManager>();
             CameraManager = GetComponentInChildren<CameraManager>();
             ConfigsManager = GetComponentInChildren<ConfigsManager>();
+            LayersManager = GetComponentInChildren<LayersManager>();
             TimeManager = GetComponentInChildren<TimeManager>();
-            //UIManager = GetComponentInChildren<UIManager>();
+            UIManager = GetComponentInChildren<UIManager>();
+            Pawn = FindFirstObjectByType<PawnController>();
             _components.Add(AudioManager);
             _components.Add(CameraManager);
             _components.Add(ConfigsManager);
+            _components.Add(LayersManager);
             _components.Add(TimeManager);
             //_components.Add(UIManager);
+            _components.Add(Pawn);
             foreach (BasicComponent component in _components)
             {
                 component.Initialize();
