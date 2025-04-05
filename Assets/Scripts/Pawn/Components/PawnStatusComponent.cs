@@ -33,6 +33,7 @@ namespace WinterUniverse
             StateHolder = new();
             StatHolder.CreateStats(GameManager.StaticInstance.ConfigsManager.Stats);
             StateHolder.CreateStates(GameManager.StaticInstance.ConfigsManager.States);
+            ChangeFaction(GameManager.StaticInstance.ConfigsManager.Factions[UnityEngine.Random.Range(0, GameManager.StaticInstance.ConfigsManager.Factions.Count)]);
         }
 
         public override void Enable()
@@ -40,7 +41,6 @@ namespace WinterUniverse
             base.Enable();
             StatHolder.OnStatsChanged += ForceUpdateVitalities;
             StatHolder.RecalculateStats();
-            Revive();
         }
 
         public override void Disable()
@@ -101,10 +101,7 @@ namespace WinterUniverse
             {
                 return;
             }
-            if (_pawn.Equipment.ArmorSlot.Config != null)
-            {
-                EffectHolder.ApplyEffects(_pawn.Equipment.ArmorSlot.Config.OnDamageEffects);
-            }
+            EffectHolder.ApplyEffects(_pawn.Equipment.Armor.OnDamageEffects);
             float resistance = StatHolder.GetStat(type.ResistanceStat.ID).CurrentValue;
             if (resistance < 100f)
             {
@@ -147,10 +144,13 @@ namespace WinterUniverse
             OnHealthChanged?.Invoke(_healthCurrent, StatHolder.HealthMax);
             StateHolder.SetStateValue("Is Dead", true);
             OnDied?.Invoke();
+            // test
+            GameManager.StaticInstance.PawnsManager.RemoveController(_pawn);
         }
 
         public void Revive()
         {
+            _pawn.Animator.PlayAction("Revive");
             StateHolder.SetStateValue("Is Dead", false);
             RestoreHealthCurrent(StatHolder.HealthMax);
             OnRevived?.Invoke();

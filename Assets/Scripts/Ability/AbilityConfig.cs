@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace WinterUniverse
@@ -6,13 +7,15 @@ namespace WinterUniverse
     public class AbilityConfig : BasicInfoConfig
     {
         [SerializeField] private AbilityCastTypeConfig _castType;
-        [SerializeField] private AbilityHitTypeConfig _hitType;
+        [SerializeField] private List<AbilityHitTypeConfig> _hitTypes = new();
         [SerializeField] private AbilityTargetType _targetType;
-        [SerializeField] private float _cooldown = 1f;
+        [SerializeField, Range(0.1f, 100f)] private float _castTime = 0.25f;
+        [SerializeField, Range(0.1f, 999999f)] private float _cooldownTime = 1f;
 
         public AbilityCastTypeConfig CastType => _castType;
-        public AbilityHitTypeConfig HitType => _hitType;
+        public List<AbilityHitTypeConfig> HitTypes => _hitTypes;
         public AbilityTargetType TargetType => _targetType;
-        public float Cooldown => _cooldown;
+        public float CastTime => _castTime;
+        public float CooldownTime => _cooldownTime;
     }
 }

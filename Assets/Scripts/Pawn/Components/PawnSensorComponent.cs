@@ -6,6 +6,9 @@ namespace WinterUniverse
 {
     public class PawnSensorComponent : PawnComponent
     {
+        [SerializeField] private float _detecttionCooldown = 0.5f;
+        private float _detectionTime;
+
         public List<PawnController> DetectedTargets { get; private set; }
         public List<IInteractable> DetectedInteractables { get; private set; }
         public List<Collider2D> DetectedObstacles { get; private set; }
@@ -18,7 +21,21 @@ namespace WinterUniverse
             DetectedObstacles = new();
         }
 
-        public void Detect()
+        public override void OnFixedUpdate()
+        {
+            base.OnFixedUpdate();
+            if (_detectionTime >= _detecttionCooldown)
+            {
+                _detectionTime = 0f;
+                Detect();
+            }
+            else
+            {
+                _detectionTime += Time.fixedDeltaTime;
+            }
+        }
+
+        private void Detect()
         {
             DetectedTargets.Clear();
             DetectedInteractables.Clear();
@@ -30,7 +47,7 @@ namespace WinterUniverse
                 {
                     if (collider.TryGetComponent(out PawnController target))
                     {
-                        if (target != _pawn)
+                        if (target != _pawn && target.Status.StateHolder.CompareStateValue("Is Dead", false))
                         {
                             if (TargetIsEnemy(target) && TargetIsVisible(target))
                             {
@@ -49,46 +66,6 @@ namespace WinterUniverse
                 }
 
             }
-            //Collider2D[] colliders = Physics2D.OverlapCircleAll(_pawn.transform.position, _pawn.ViewDistance, GameManager.StaticInstance.LayersManager.ObstacleMask);
-            //if (colliders.Length > 0)
-            //{
-            //    foreach (Collider2D collider in colliders)
-            //    {
-            //        _obstacles.Add(collider);
-            //    }
-            //}
-            //colliders = Physics2D.OverlapCircleAll(_pawn.transform.position, _pawn.ViewDistance, GameManager.StaticInstance.LayersManager.InteractableMask);
-            //if (colliders.Length > 0)
-            //{
-            //    foreach (Collider2D collider in colliders)
-            //    {
-            //        if (collider.TryGetComponent(out InteractableBase interactable))
-            //        {
-            //            _interactables.Add(interactable);
-            //        }
-            //    }
-            //}
-            //colliders = Physics2D.OverlapCircleAll(_pawn.transform.position, _pawn.ViewDistance, GameManager.StaticInstance.LayersManager.DetectableMask);
-            //if (colliders.Length > 0)
-            //{
-            //    foreach (Collider2D collider in colliders)
-            //    {
-            //        if (collider.TryGetComponent(out PawnController pawn))
-            //        {
-            //            if (pawn != _pawn && !pawn.IsDead)
-            //            {
-            //                if (pawn != _pawn.Target)
-            //                {
-            //                    _obstacles.Add(collider);// to avoid other pawns
-            //                }
-            //                if (TargetIsEnemy(pawn) && TargetIsVisible(pawn.transform))
-            //                {
-            //                    _targets.Add(pawn);
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
         }
 
         public bool TargetIsVisible(PawnController target)

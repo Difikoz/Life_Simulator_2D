@@ -44,6 +44,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Pawn
+    uniqueID: 771155989
+    locked: 0
   - name: Foreground
     uniqueID: 1516173447
     locked: 0

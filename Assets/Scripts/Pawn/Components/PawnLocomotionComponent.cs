@@ -8,23 +8,66 @@ namespace WinterUniverse
         public Action OnStartMoving;
         public Action OnStopMoving;
 
-        public Vector2 MoveDirection;// { get; private set; }
+        private float _stopDistance;
+
+        public Vector3 Destination { get; private set; }
+        public Vector2 MoveDirection { get; private set; }
+        public Vector2 LookDirection { get; private set; }
         public Vector2 MoveVelocity { get; private set; }
+        public float RemainingDistance { get; private set; }
+        public float LookAngle { get; private set; }
         public bool ReachedDestination { get; private set; }
         public bool IsMoving { get; private set; }
-        public bool IsFacingRight { get; private set; }
 
-        public override void Initialize()
+        public override void Enable()
         {
-            base.Initialize();
-            IsFacingRight = true;
+            base.Enable();
+            StopMovement();
         }
 
         public override void OnFixedUpdate()
         {
             base.OnFixedUpdate();
+            CalculateLookDirection();
+            CheckDestination();
             HandleMovement();
             HandleRotation();
+        }
+
+        private void CalculateLookDirection()
+        {
+            if (_pawn.Combat.Target != null)
+            {
+                LookDirection = (_pawn.Combat.Target.transform.position - transform.position).normalized;
+            }
+            else
+            {
+                LookDirection = MoveDirection;
+            }
+        }
+
+        private void CheckDestination()
+        {
+            RemainingDistance = Vector2.Distance(transform.position, Destination);
+            if (ReachedDestination)
+            {
+                if (RemainingDistance > _stopDistance)
+                {
+                    ReachedDestination = false;
+                }
+            }
+            else
+            {
+                if (RemainingDistance < _stopDistance)
+                {
+                    StopMovement();
+                }
+                else
+                {
+
+                    MoveDirection = _pawn.ContextSolver.GetDirectionToMove(Destination);
+                }
+            }
         }
 
         private void HandleMovement()
@@ -39,7 +82,7 @@ namespace WinterUniverse
                 }
                 else
                 {
-                    MoveVelocity = Vector2.MoveTowards(MoveVelocity, MoveDirection, Time.fixedDeltaTime);
+                    MoveVelocity = Vector2.MoveTowards(MoveVelocity, MoveDirection, 2f * Time.fixedDeltaTime);
                 }
             }
             else
@@ -52,7 +95,7 @@ namespace WinterUniverse
                 }
                 else
                 {
-                    MoveVelocity = Vector2.MoveTowards(MoveVelocity, Vector2.zero, Time.fixedDeltaTime);
+                    MoveVelocity = Vector2.MoveTowards(MoveVelocity, Vector2.zero, 4f * Time.fixedDeltaTime);
                 }
             }
             _pawn.RB.linearVelocity = MoveVelocity * _pawn.Status.StatHolder.MoveSpeed;
@@ -61,24 +104,30 @@ namespace WinterUniverse
 
         private void HandleRotation()
         {
-            if (IsFacingRight)
+            LookAngle = Mathf.Atan2(LookDirection.y, LookDirection.x) * Mathf.Rad2Deg;
+            _pawn.RB.rotation = Mathf.MoveTowardsAngle(_pawn.RB.rotation, LookAngle, _pawn.Status.StatHolder.RotateSpeed * Time.fixedDeltaTime);
+        }
+
+        public void SetDestination(Vector3 position, float stopDistance = 0f)
+        {
+            if (stopDistance > 0f)
             {
-                if (MoveVelocity.x < 0f)
-                {
-                    IsFacingRight = false;
-                    transform.localScale = new(-1f, 1f, 1f);
-                    _pawn.Animator.ArmsPoint.localScale = new(1f, -1f, 1f);
-                }
+                _stopDistance = stopDistance;
             }
             else
             {
-                if (MoveVelocity.x > 0f)
-                {
-                    IsFacingRight = true;
-                    transform.localScale = new(1f, 1f, 1f);
-                    _pawn.Animator.ArmsPoint.localScale = new(1f, 1f, 1f);
-                }
+                _stopDistance = _pawn.Collider.radius;
             }
+            Destination = position;
+            ReachedDestination = false;
+        }
+
+        public void StopMovement()
+        {
+            Destination = transform.position;
+            MoveDirection = Vector2.zero;
+            _stopDistance = _pawn.Collider.radius;
+            ReachedDestination = true;
         }
     }
 }

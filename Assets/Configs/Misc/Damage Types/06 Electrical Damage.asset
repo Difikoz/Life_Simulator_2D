@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 60a6bce2acd0e254a9be1759628e8392, type: 3}
-  m_Name: 01 Slicing Damage
+  m_Name: 06 Electrical Damage
   m_EditorClassIdentifier: 
-  _id: Slicing Damage
+  _id: Electrical Damage
   _displayName:
     m_TableReference:
       m_TableCollectionName: 
@@ -39,7 +39,7 @@ MonoBehaviour:
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
-  _resistanceStat: {fileID: 0}
+  _resistanceStat: {fileID: 11400000, guid: 6b65070362b14744cb71e0d0d98dd5d6, type: 2}
   _hitVFX: {fileID: 0}
   _hitClip: {fileID: 0}
   references:

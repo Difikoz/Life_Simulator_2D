@@ -43,15 +43,12 @@ MonoBehaviour:
   _stackSize: 1
   _weight: 1
   _price: 100
-  _weaponPrefab: {fileID: 5633117876055949237, guid: ed3f93df133760240b3ad9124a7ba3e1, type: 3}
-  _cooldown: 1
+  _ability: {fileID: 11400000, guid: 186e0a875d0ad164a87b58321226842a, type: 2}
   _modifiers:
   - _stat: {fileID: 11400000, guid: b366043e4c427c84985d98ef0db91826, type: 2}
     _modifier:
       _type: 1
       _value: -10
-  _abilities:
-  - {fileID: 11400000, guid: 186e0a875d0ad164a87b58321226842a, type: 2}
   references:
     version: 2
     RefIds: []

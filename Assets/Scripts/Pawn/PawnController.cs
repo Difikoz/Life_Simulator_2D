@@ -27,6 +27,7 @@ namespace WinterUniverse
         public PawnSensorComponent Sensor { get; private set; }
         public PawnSoundComponent Sound { get; private set; }
         public PawnStatusComponent Status { get; private set; }
+        public ContextSolver ContextSolver { get; private set; }
 
         public override void Initialize()
         {
@@ -42,6 +43,7 @@ namespace WinterUniverse
             Sensor = GetComponent<PawnSensorComponent>();
             Sound = GetComponent<PawnSoundComponent>();
             Status = GetComponent<PawnStatusComponent>();
+            ContextSolver = new(this);
             _components.Add(Animator);
             _components.Add(Combat);
             _components.Add(Equipment);
@@ -50,7 +52,7 @@ namespace WinterUniverse
             _components.Add(Sensor);
             _components.Add(Sound);
             _components.Add(Status);
-            foreach(PawnComponent component in _components)
+            foreach (PawnComponent component in _components)
             {
                 component.Initialize();
             }
@@ -63,6 +65,7 @@ namespace WinterUniverse
             {
                 component.Enable();
             }
+            Status.Revive();
         }
 
         public override void Disable()

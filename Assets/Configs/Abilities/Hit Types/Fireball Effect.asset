@@ -9,9 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9090be3992e30d4ca325f79da38a3d1, type: 3}
-  m_Name: Damage
+  m_Script: {fileID: 11500000, guid: 44419d24142073243965dfacce6da725, type: 3}
+  m_Name: Fireball Effect
   m_EditorClassIdentifier: 
-  _damageTypes:
-  - _damage: 10
-    _type: {fileID: 11400000, guid: 4cda5c17b21116846b97cb4a71a8db17, type: 2}
+  _effects:
+  - _chance: 1
+    _config: {fileID: 11400000, guid: 76450eee6c8879249871380632ef4b2d, type: 2}
+    _value: 5
+    _duration: 5

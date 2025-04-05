@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8485ad322d7ed84e9406a69a477ad08, type: 3}
   m_Name: AOE
   m_EditorClassIdentifier: 
+  _distance: 10
   _radius: 5
   _maxTargets: 10

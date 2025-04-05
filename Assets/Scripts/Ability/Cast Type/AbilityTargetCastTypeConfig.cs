@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace WinterUniverse
@@ -5,17 +6,16 @@ namespace WinterUniverse
     [CreateAssetMenu(fileName = "Target", menuName = "Winter Universe/Ability/Cast Type/New Target")]
     public class AbilityTargetCastTypeConfig : AbilityCastTypeConfig
     {
-        [SerializeField] private float _distance = 2f;
-
-        public float Distance => _distance;
-
-        public override void OnCast(PawnController caster, PawnController target, Vector3 position, Vector3 direction, float angle, AbilityHitTypeConfig hitType, AbilityTargetType targetType)
+        public override void OnCast(PawnController caster, PawnController target, Vector3 position, Vector3 direction, float angle, List<AbilityHitTypeConfig> hitTypes, AbilityTargetType targetType)
         {
-            if (target == null || Vector2.Distance(target.transform.position, position) > _distance)
+            if (target != null)
             {
-                return;
+                position = target.transform.position;
             }
-            hitType.OnHit(caster, target, position, direction, angle, targetType);
+            foreach (AbilityHitTypeConfig hitType in hitTypes)
+            {
+                hitType.OnHit(caster, target, position, direction, angle, targetType);
+            }
         }
     }
 }

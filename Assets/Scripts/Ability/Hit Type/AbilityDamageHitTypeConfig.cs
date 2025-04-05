@@ -12,7 +12,11 @@ namespace WinterUniverse
 
         public override void OnHit(PawnController caster, Collider2D collider, Vector3 position, Vector3 direction, float angle, AbilityTargetType targetType)
         {
-
+            PawnController target = collider.GetComponentInParent<PawnController>();
+            if (target != null)
+            {
+                OnHit(caster, target, position, direction, angle, targetType);
+            }
         }
 
         public override void OnHit(PawnController caster, PawnController target, Vector3 position, Vector3 direction, float angle, AbilityTargetType targetType)

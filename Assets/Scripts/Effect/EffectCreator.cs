@@ -7,8 +7,8 @@ namespace WinterUniverse
     {
         [SerializeField, Range(0f, 1f)] private float _chance = 0.5f;
         [SerializeField] private EffectConfig _config;
-        [SerializeField] private float _value = 1f;
-        [SerializeField] private float _duration = 1f;
+        [SerializeField, Range(1f, 999999f)] private float _value = 1f;
+        [SerializeField, Range(1f, 999999f)] private float _duration = 1f;
 
         public float Chance => _chance;
         public EffectConfig Config => _config;

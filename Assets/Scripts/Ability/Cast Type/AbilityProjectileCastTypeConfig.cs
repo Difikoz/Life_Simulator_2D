@@ -1,4 +1,5 @@
 using Lean.Pool;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace WinterUniverse
@@ -8,14 +9,14 @@ namespace WinterUniverse
     {
         [SerializeField] private GameObject _projectile;
         [SerializeField] private Sprite _projectileSprite;
-        [SerializeField] private float _projectileSize = 0.2f;
-        [SerializeField] private float _range = 10f;
-        [SerializeField] private float _force = 10f;
-        [SerializeField] private float _spread = 5f;
-        [SerializeField] private int _count = 1;
-        [SerializeField] private int _pierce = 1;
+        [SerializeField, Range(0.1f, 999f)] private float _projectileSize = 0.2f;
+        [SerializeField, Range(0.1f, 999f)] private float _range = 10f;
+        [SerializeField, Range(0.1f, 999f)] private float _force = 10f;
+        [SerializeField, Range(0f, 360f)] private float _spread = 5f;
+        [SerializeField, Range(1, 999)] private int _count = 1;
+        [SerializeField, Range(0, 999)] private int _pierce = 1;
         [SerializeField] private bool _isHoming;
-        [SerializeField] private float _turnSpeed = 180f;
+        [SerializeField, Range(0.1f, 720f)] private float _turnSpeed = 180f;
 
         public GameObject Projectile => _projectile;
         public Sprite ProjectileSprite => _projectileSprite;
@@ -28,13 +29,13 @@ namespace WinterUniverse
         public bool IsHoming => _isHoming;
         public float TurnSpeed => _turnSpeed;
 
-        public override void OnCast(PawnController caster, PawnController target, Vector3 position, Vector3 direction, float angle, AbilityHitTypeConfig hitType, AbilityTargetType targetType)
+        public override void OnCast(PawnController caster, PawnController target, Vector3 position, Vector3 direction, float angle, List<AbilityHitTypeConfig> hitTypes, AbilityTargetType targetType)
         {
             float spread;
             for (int i = 0; i < _count; i++)
             {
                 spread = angle + Random.Range(-_spread, _spread);
-                LeanPool.Spawn(_projectile, position, Quaternion.Euler(0f, 0f, spread)).GetComponent<ProjectileController>().Initialize(caster, target, this, hitType, targetType);
+                LeanPool.Spawn(_projectile, position, Quaternion.Euler(0f, 0f, spread)).GetComponent<ProjectileController>().Initialize(caster, target, this, hitTypes, targetType);
             }
         }
     }

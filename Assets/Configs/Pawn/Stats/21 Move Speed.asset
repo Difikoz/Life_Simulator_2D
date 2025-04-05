@@ -39,7 +39,7 @@ MonoBehaviour:
       m_Key: 
     m_FallbackState: 0
     m_WaitForCompletion: 0
-  _baseValue: 1
+  _baseValue: 10
   _minValue: 0
   _maxValue: 999999
   _isPercent: 0

@@ -1,33 +1,37 @@
 using Lean.Pool;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace WinterUniverse
 {
     [RequireComponent(typeof(Rigidbody2D))]
+    [RequireComponent(typeof(CircleCollider2D))]
     public class ProjectileController : MonoBehaviour
     {
         [SerializeField] private Rigidbody2D _rb;
         [SerializeField] private SpriteRenderer _spriteRenderer;
+        [SerializeField] private CircleCollider2D _collider;
 
         private PawnController _owner;
         private PawnController _target;
         private AbilityProjectileCastTypeConfig _config;
-        private AbilityHitTypeConfig _hitType;
+        private List<AbilityHitTypeConfig> _hitTypes;
         private AbilityTargetType _targetType;
         private Vector2 _directionToTarget;
         private float _angleToTarget;
         private int _pierceCount;
 
-        public void Initialize(PawnController owner, PawnController target, AbilityProjectileCastTypeConfig config, AbilityHitTypeConfig hitType, AbilityTargetType targetType)
+        public void Initialize(PawnController owner, PawnController target, AbilityProjectileCastTypeConfig config, List<AbilityHitTypeConfig> hitTypes, AbilityTargetType targetType)
         {
             _owner = owner;
             _target = target;
             _config = config;
-            _hitType = hitType;
+            _hitTypes = hitTypes;
             _targetType = targetType;
             _spriteRenderer.sprite = _config.ProjectileSprite;
-            transform.localScale = Vector3.one * _config.ProjectileSize;
+            _collider.radius = _config.ProjectileSize;
             _pierceCount = 0;
             _rb.linearVelocity = transform.right * _config.Force;
             if (_config.IsHoming && _target != null)
@@ -41,9 +45,10 @@ namespace WinterUniverse
         {
             while (_target != null && _target.Status.StateHolder.CompareStateValue("Is Dead", false))
             {
-                _directionToTarget = (_target.Animator.BodyPoint.position - transform.position).normalized;
+                _directionToTarget = (_target.transform.position - transform.position).normalized;
                 _angleToTarget = Mathf.Atan2(_directionToTarget.y, _directionToTarget.x) * Mathf.Rad2Deg;
                 _rb.rotation = Mathf.MoveTowardsAngle(_rb.rotation, _angleToTarget, _config.TurnSpeed * Time.deltaTime);
+                _rb.linearVelocity = transform.right * _config.Force;
                 yield return null;
             }
         }
@@ -57,14 +62,9 @@ namespace WinterUniverse
         private void OnTriggerEnter2D(Collider2D collision)
         {
             _pierceCount++;
-            PawnController target = collision.GetComponentInParent<PawnController>();
-            if (target != null)
+            foreach (AbilityHitTypeConfig hitType in _hitTypes)
             {
-                _hitType.OnHit(_owner, target, transform.position, transform.right, transform.eulerAngles.z, _targetType);
-            }
-            else
-            {
-                _hitType.OnHit(_owner, collision, transform.position, transform.right, transform.eulerAngles.z, _targetType);
+                hitType.OnHit(_owner, collision, transform.position, transform.right, transform.eulerAngles.z, _targetType);
             }
             if (_pierceCount > _config.Pierce)
             {

@@ -40,8 +40,12 @@ MonoBehaviour:
     m_FallbackState: 0
     m_WaitForCompletion: 0
   _castType: {fileID: 11400000, guid: d3832d643f662ae45b5296ef509d11e8, type: 2}
-  _hitType: {fileID: 11400000, guid: 85647f7eb6d47844abb2e3851247c63f, type: 2}
+  _hitTypes:
+  - {fileID: 11400000, guid: 85647f7eb6d47844abb2e3851247c63f, type: 2}
+  - {fileID: 11400000, guid: ee9d541176413354b88720a50aa6a0d3, type: 2}
   _targetType: 1
+  _castTime: 0.5
+  _cooldownTime: 2
   references:
     version: 2
     RefIds: []

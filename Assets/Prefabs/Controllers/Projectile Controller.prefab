@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8497504487296436560}
   - component: {fileID: 4598636867604275551}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: 9120358816687364678, guid: a98fa658c478486459518578c4caf13f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -136,6 +136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rb: {fileID: 7672718919733461452}
   _spriteRenderer: {fileID: 4598636867604275551}
+  _collider: {fileID: 5634403762685384995}
 --- !u!50 &7672718919733461452
 Rigidbody2D:
   serializedVersion: 5
@@ -198,4 +199,4 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.5
+  m_Radius: 0.1
